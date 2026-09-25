@@ -370,6 +370,8 @@ h2{ font-size:12px; font-weight:600; color:var(--dim);
 
 @media (prefers-reduced-motion:reduce){ *{ transition:none !important; } }
 </style>
+<!-- 共通の楽器の音（読み込めない時は、これまでの合成音で鳴る） -->
+<script src="https://yagarguitar-stack.github.io/design-system/v1/sound.js"></script>
 </head>
 <body>
 
@@ -410,6 +412,7 @@ h2{ font-size:12px; font-weight:600; color:var(--dim);
   <div id="radar"></div>
   <button id="wipe" type="button">記録を消してはじめから</button>
   <p id="wiped" aria-live="polite"></p>
+  <div id="sndcredits"></div>
 </div>
 
 <!-- ══ 速さをえらぶ ══ -->
@@ -566,6 +569,7 @@ function audioReady(){
   SEG=AC.createGain(); SEG.gain.value=1; SEG.connect(AC.destination);
   try{ applyVol(); }catch(_){}
   DRUMG=AC.createGain(); DRUMG.gain.value=DRUM_MIX; DRUMG.connect(MASTER);
+  try{ smpInit(); }catch(_){}
   /* iOS の無音対策：長さ0のバッファを一度鳴らして解錠する */
   try{ const b=AC.createBuffer(1,1,22050); const src=AC.createBufferSource();
        src.buffer=b; src.connect(MASTER); src.start(0); }catch(e){}
@@ -3514,6 +3518,9 @@ function instGain(v, midi, vol){
 function note(at, midi, vol, cut, opt){
   opt = opt || {};
   const v = opt.v || INST;
+  /* 録音の音が使える時はそちらで鳴らす。使えなければ下の合成音へ */
+  const r = smpNote(at, midi, vol, cut, opt, v);
+  if(r) return r;
   const g = instGain(v, midi, vol);
 
   if(v === 'piano') return piano(at, midi, g, cut);
@@ -3522,6 +3529,78 @@ function note(at, midi, vol, cut, opt){
      ここで差し替えれば、この1音だけがその音色になる。 */
   if(v && v !== 'guitar'){ try{ SND.set({ tone:v }); }catch(_){} }
   return pluck(at, midi, g, cut, opt);
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   録音の音（共通の楽器の音 design-system/v1/sound.js）
+
+   合成音の代わりに、実際の楽器を録音した音で鳴らす。
+   **読み込めない時（通信がない、置き場がない）は、これまでの合成音のまま。**
+   読み込みが済むまでの間も合成音で鳴る。
+
+   ══ 声と録音の対応 ══
+     ギター（画面の楽器）・アコースティック … アコギ
+     ナイロン                               … ナイロン
+     エレキ                                 … エレキ
+     クランチ・ドライブ・ハイゲイン         … エレキの録音を、今のアンプに通して歪ませる
+     ピアノ                                 … ピアノ
+
+   録音には楽器の胴の響きがすでに入っているので、歪み以外はアンプを通さず
+   出口（MASTER）へ直に送る。合成の箱鳴りを重ねると、響きが二重になる。
+
+   ══ 音量 ══
+   録音は1音ごとの大きさを sound.js 側で揃えてある（鳴り始め0.3秒）。
+   **高低を問う段で、大きさから答えが読めないようにするため。**
+   合成音で掛けていた「高い音ほど持ち上げる」手当ては要らない。
+   ここでは、合成音と同じ大きさに釣り合わせる倍率だけを掛ける。
+   ══════════════════════════════════════════════════════════════ */
+const SMP_INST = { guitar:'acoustic', steel:'acoustic', nylon:'nylon', clean:'electric',
+                   crunch:'electric', drive:'electric', metal:'electric', piano:'piano' };
+const SMP_AMP  = { crunch:true, drive:true, metal:true };
+let   SMP_TRIM   = 1.324;  /* 合成音との釣り合い（4つの声の C3・C4・C5 を鳴らして測った平均） */
+let   SMP_AMP_IN = 2.941;  /* アンプに入れる大きさ（合成の弦と同じ強さで歪むように。入口で測った平均） */
+/* 高さによる大きさの傾きを打ち消す（デシベル／半音）。
+   音域を3半音おきに鳴らして測った傾きの逆。どれも2オクターブで2デシベル未満と小さいが、
+   **高低を問う段では、系統的な傾きは小さくても答えの手がかりになる。** */
+const SMP_TILT = {"steel": 0.062, "piano": -0.017, "nylon": -0.026, "clean": 0.014};
+const SMP_LAST = new Map();   /* 弦ごとの最後の音。同じ弦を弾けば前の音は止まる */
+let   SMP_ON = true;          /* 試験用。false にすると合成音に戻る */
+
+function smpInit(){
+  if(smpInit.done || !AC || !window.DS || !DS.sound) return;
+  smpInit.done = true;
+  try{
+    DS.sound.use({ context:AC, output:MASTER });
+    DS.sound.load(['acoustic','nylon','electric','piano']).then(smpCredits).catch(function(){});
+  }catch(_){}
+}
+function smpReady(v){
+  const inst = SMP_INST[v];
+  return !!(SMP_ON && inst && window.DS && DS.sound && DS.sound.isReady(inst));
+}
+function smpNote(at, midi, vol, cut, opt, v){
+  if(!AC || !smpReady(v)) return null;
+  /* 弦の技（ハーモニクス・チョーキング等）は録音では作れないので合成音に任せる */
+  if(opt.harm || opt.pm || opt.from || opt.glide || opt.back || opt.vib) return null;
+  if(typeof window!=='undefined' && window.__pluckLog) window.__pluckLog.push({at, midi});
+  let dest = MASTER, g = vol * SMP_TRIM * Math.pow(10, ((SMP_TILT[v==='guitar'?'steel':v] || 0) * ((midi == null ? 60 : midi) - 60)) / 20);
+  if(SMP_AMP[v]){
+    try{ SND.set({ tone:v }); }catch(_){}
+    dest = guitarBus() || MASTER;
+    g = vol * SMP_AMP_IN;
+  }
+  const s = (opt.str != null && opt.str >= 0) ? opt.str : null;
+  if(s != null){ const p = SMP_LAST.get(s); if(p) try{ p.stop(Math.max(at, AC.currentTime)); }catch(_){} }
+  const h = DS.sound.play(SMP_INST[v], midi, { time:at, vel:Math.sqrt(Math.max(0, g)),
+                                               dur:(cut > 0 ? cut : null), release:0.06, dest:dest });
+  if(s != null) SMP_LAST.set(s, h);
+  return h;
+}
+/* 出典の表記。ナイロン（CC BY-SA 3.0）を使うので載せる */
+function smpCredits(){
+  const el = document.getElementById('sndcredits');
+  if(el && window.DS && DS.sound && DS.sound.creditsHtml) el.innerHTML = DS.sound.creditsHtml(['acoustic','nylon','electric','piano']);
 }
 
 /* ══════════════════════════════════════════════════════════════

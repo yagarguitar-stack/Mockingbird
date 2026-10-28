@@ -260,6 +260,23 @@ h2{ font-size:12px; font-weight:600; color:var(--dim);
 .needle.ok{ stroke:var(--brass); }
 .pivot{ fill:var(--ink); }
 .tval{ fill:var(--ink); font-size:13px; font-weight:600; }
+.thz{ fill:var(--dim); font-size:10.5px; }
+
+/* ══ 旋律の形 ══ */
+.melfig{ width:100%; height:auto; display:block; }
+.mgrid{ stroke:var(--rule); stroke-width:1; }
+.mgrid.tonic{ stroke:var(--brass); stroke-width:1.6; }
+.mlab{ fill:var(--dim); font-size:9px; }
+.mline{ fill:none; stroke-width:2.2; stroke-linejoin:round; stroke-linecap:round; }
+.mline.one{ stroke:var(--ink); }
+.mline.two{ stroke:var(--brass); }
+.mdot{ stroke:var(--paper); stroke-width:1.5; }
+.mdot.one{ fill:var(--ink); }
+.mdot.two{ fill:var(--brass); }
+.mmark{ fill:none; stroke:var(--felt); stroke-width:2; }
+.mkey{ font-size:10px; }
+.mkey.one{ fill:var(--ink); }
+.mkey.two{ fill:var(--brass); }
 
 #next,#again{ width:100%; background:var(--ink); color:var(--paper);
               padding:15px; border-radius:8px; font-size:15px; font-weight:600; }
@@ -369,215 +386,7 @@ h2{ font-size:12px; font-weight:600; color:var(--dim);
 .radarnote{ color:var(--dim); font-size:11.5px; margin:var(--s1) 0 0; }
 
 @media (prefers-reduced-motion:reduce){ *{ transition:none !important; } }
-
-/* ══════════════════════════════════════════════════════════════
-   モチーフ層「生成りの端末」（2026-10）
-   既存の仕組み・配置には触れず、色と形だけをここで上書きする。
-   ── 作法 ──
-   ・地は単色（初級は生成り、上級は墨）。淡い方眼を敷き、背景のト音記号はその上に置く
-   ・角は丸めない。押せる物は平らな枠、選ばれた物は「反転した帯」で示す
-   ・正解・済み・選択中 ＝ 文字色で塗る（反転）
-   ・差し色（初級は深紅、上級は真鍮）＝「見てほしい所」だけ：今の段・不正解・合格・図の鍵
-   ══════════════════════════════════════════════════════════════ */
-:root{
-  --paper:#CDC8B0; --raise:#D6D1BB; --ink:#4E4B42;
-  --dim:#7A7666; --rule:rgba(78,75,66,.38); --sunk:#C3BEA5;
-  --doneink:#68645A; --donedim:#858170;
-  --staff:rgba(78,75,66,.30);
-  --acc:#8E2A2A;
-  --grid:rgba(78,75,66,.07);
-  --keyw:#DCD7C2; --keyb:#4E4B42;
-}
-:root.adv{
-  --paper:#2F2D28; --raise:#38362F; --ink:#D8D2B9;
-  --dim:#A29D88; --rule:rgba(216,210,185,.32); --sunk:#27251F;
-  --doneink:#BEB8A1; --donedim:#98937E;
-  --staff:rgba(216,210,185,.24);
-  --acc:#B8963E;
-  --grid:rgba(216,210,185,.05);
-  --keyw:#D8D2B9; --keyb:#1E1D19;
-}
-html{ background-color:var(--paper);
-      background-image:linear-gradient(var(--grid) 1px,transparent 1px),
-                       linear-gradient(90deg,var(--grid) 1px,transparent 1px);
-      background-size:16px 16px; }
-:focus-visible{ outline:1px solid var(--acc); outline-offset:3px; border-radius:0; }
-
-/* 区切り：二重線 */
-.feltline{ height:4px; background:none; opacity:1; border-radius:0;
-           border-top:1px solid var(--ink); border-bottom:1px solid var(--ink); }
-#feedback{ border-top:3px double var(--ink); }
-.tag{ letter-spacing:.3em; }
-h2{ letter-spacing:.24em; display:flex; align-items:center; gap:8px; }
-h2::before{ content:''; width:7px; height:7px; background:var(--ink); flex:0 0 auto; }
-
-/* 上の切り替え：選ばれた所が反転した帯になる */
-#course{ border-bottom:1px solid var(--ink); }
-#course .inst{ border-bottom:0; margin-bottom:0; letter-spacing:.2em; }
-#course .inst.on{ background:var(--ink); color:var(--paper); }
-.instbox{ border-radius:0; border-color:var(--ink); background:transparent; }
-.instbox .inst+.inst{ border-left-color:var(--ink); }
-.volline input[type=range]{ accent-color:var(--ink); }
-
-/* 段の一覧 */
-.node{ border-radius:0; width:26px; height:26px; background:transparent; border-color:var(--rule); }
-.stepmain{ grid-template-columns:26px 1fr auto; }
-.step.here .node{ border-color:var(--acc); color:var(--acc); transform:none; border-width:1.5px; }
-.step.here::before{ content:''; position:absolute; left:-10px; top:50%; width:4px; height:26px;
-                    transform:translateY(-50%); background:var(--acc); }
-.step.done .node{ background:var(--ink); border-color:var(--ink); color:var(--paper); }
-.stepdrill{ border-radius:0; border-color:var(--rule); letter-spacing:.1em; }
-#wiped{ color:var(--acc); }
-
-/* 出題 */
-#qstage{ letter-spacing:.2em; }
-.tick{ height:6px; border-radius:0; background:transparent; border:1px solid var(--rule); }
-.tick.hit{ background:var(--ink); border-color:var(--ink); }
-.tick.miss{ background:var(--acc); border-color:var(--acc); }
-.tick.now{ background:repeating-linear-gradient(-45deg,var(--ink) 0 1px,transparent 1px 4px); border-color:var(--ink); }
-
-#play{ position:relative; border-radius:0; border:1px solid var(--ink); border-bottom-width:1px;
-       background:transparent; letter-spacing:.2em; }
-#play::before,#play::after{ content:''; position:absolute; width:9px; height:9px; border:0 solid var(--ink); }
-#play::before{ top:-5px; left:-5px; border-width:1px 0 0 1px; }
-#play::after{ bottom:-5px; right:-5px; border-width:0 1px 1px 0; }
-#play:active,#play.ringing{ background:var(--ink); color:var(--paper); border-bottom-width:1px; transform:none; }
-
-.opt{ border-radius:0; border:1px solid var(--rule); border-bottom-width:1px; background:var(--raise); }
-.opt:not(:disabled):active{ background:var(--ink); color:var(--paper); border-bottom-width:1px; transform:none; }
-.opt.right{ background:var(--ink); border-color:var(--ink); color:var(--paper); }
-.opt.wrong{ border-color:var(--acc); color:var(--acc);
-            background:var(--raise);
-            box-shadow:inset 0 0 0 1px var(--acc); }
-.opt.right .glyphline{ stroke:var(--paper); } .opt.right .glyphdot{ fill:var(--paper); }
-.opt.wrong .glyphline{ stroke:var(--acc); }   .opt.wrong .glyphdot{ fill:var(--acc); }
-
-/* 鍵盤（選択肢の鍵と、答え合わせの図） */
-.keyw{ border-radius:0; background:var(--keyw); color:var(--keyb); border:1px solid var(--ink); border-bottom-width:1px; }
-.keyb{ border-radius:0; background:var(--keyb); color:var(--keyw); border:1px solid var(--keyb); border-bottom-width:1px; }
-.keyopts .opt.right{ background:var(--ink); border-color:var(--ink); color:var(--paper); }
-.keyopts .opt.wrong{ background:var(--acc); border-color:var(--acc); color:var(--paper); box-shadow:none; }
-.kb-white{ fill:var(--keyw); stroke:var(--ink); }
-.kb-black{ fill:var(--keyb); stroke:var(--keyb); }
-.kb-white.on,.kb-black.on{ fill:var(--acc); stroke:var(--acc); }
-.kb-white.on.pend{ fill:var(--keyw); stroke:var(--ink); }
-.kb-black.on.pend{ fill:var(--keyb); stroke:var(--keyb); }
-.felt{ fill:var(--ink); opacity:.6; }
-
-#verdict{ letter-spacing:.2em; }
-#verdict.ok{ color:var(--ink); } #verdict.ng{ color:var(--acc); }
-.tick.zero{ stroke:var(--ink); }
-.needle{ stroke:var(--acc); } .needle.ok{ stroke:var(--ink); }
-
-#next,#again,.dgo{ border-radius:0; letter-spacing:.2em; }
-.dprac{ border-radius:0; }
-
-/* 結果 */
-#judge{ letter-spacing:.3em; }
-#judge.ok{ color:var(--acc); display:inline-block; border:1px solid var(--acc); padding:0 14px 0 18px; }
-.rtick{ border-radius:0; }
-.rtick.hit{ background:var(--ink); color:var(--paper); }
-.rtick.miss{ background:transparent; color:var(--acc); border-color:var(--acc); }
-.dcard{ border-radius:0; border-color:var(--ink); background:transparent; }
-.dstreak{ color:var(--acc); }
-.drilltrack{ border-radius:0; }
-#drillfill{ background:var(--ink); }
-
-/* 得意と苦手の図 */
-.rbest{ stroke:var(--ink); }
-.rnow{ fill:var(--acc); fill-opacity:.35; stroke:var(--acc); }
-.rdot{ fill:var(--acc); }
-
-/* 下から出る札 */
-.sheetcard{ border-radius:0; border-top:3px double var(--ink); }
-.sheetopt{ border-radius:0; border-bottom-width:1px; }
-.sheetopt:active{ background:var(--ink); color:var(--paper); transform:none; border-bottom-width:1px; }
-.sheetopt.on{ border-color:var(--acc); } .sheetopt.on b{ color:var(--acc); }
-
-/* ── 画面の組み方（踏み込み） ── */
-:root{ --inkL:#4E4B42; --paperL:#CDC8B0; }
-body{ letter-spacing:.06em; }
-#qask,.steptxt b,#judge,#verdict,.sheetname{ font-weight:500; }
-.opts.count .opt{ font-weight:500; }
-
-/* 周辺減光と細かなざらつき（いちばん奥、ト音記号より手前） */
-html::before{ content:''; position:fixed; inset:0; z-index:-2; pointer-events:none;
-  background:radial-gradient(ellipse at 50% 40%,transparent 55%,rgba(40,36,28,.22) 100%); }
-html::after{ content:''; position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.35;
-  background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 3px); }
-
-/* 画面の両端の目盛りと、四隅の括弧 */
-body::before,body::after{ content:''; position:fixed; top:0; bottom:0; width:7px; pointer-events:none; z-index:0;
-  background:
-    repeating-linear-gradient(180deg,var(--ink) 0 1px,transparent 1px 8px) 0 0/4px 100% no-repeat,
-    repeating-linear-gradient(180deg,var(--ink) 0 1px,transparent 1px 40px) 0 0/7px 100% no-repeat;
-  opacity:.35; }
-body::before{ left:6px; }
-body::after{ right:6px; transform:scaleX(-1); }
-.feltline{ position:relative; }
-.feltline::before,.feltline::after{ content:''; position:absolute; top:-4px; width:6px; height:6px; background:var(--ink); }
-.feltline::before{ left:0; } .feltline::after{ right:0; }
-
-/* 見出し：文字色の帯 */
-h2{ background:var(--ink); color:var(--paper); padding:5px 10px; margin-top:var(--s4);
-    font-weight:500; font-size:11.5px; letter-spacing:.3em; }
-h2::before{ background:var(--paper); }
-h2::after{ content:''; margin-left:auto; width:40px; height:6px;
-  background:repeating-linear-gradient(-45deg,var(--paper) 0 1px,transparent 1px 4px); opacity:.7; }
-
-/* 段：今の段は行ごと反転 */
-.step.here{ background:var(--ink); padding-left:10px; padding-right:10px; }
-:root .step.here{ --paper:#CDC8B0; --ink:#CDC8B0; --dim:rgba(205,200,176,.72); --rule:rgba(205,200,176,.45); --acc:#CDC8B0; color:#CDC8B0; background:#4E4B42; }
-:root.adv .step.here{ --paper:#D8D2B9; --ink:#D8D2B9; --dim:rgba(216,210,185,.72); --rule:rgba(216,210,185,.45); --acc:#D8D2B9; color:#2F2D28; background:#D8D2B9; }
-:root.adv .step.here{ --ink:#2F2D28; --dim:rgba(47,45,40,.7); --rule:rgba(47,45,40,.45); --acc:#2F2D28; }
-.step.here::before{ left:-14px; height:100%; width:4px; background:var(--accRoot,#8E2A2A); }
-:root.adv .step.here::before{ background:#B8963E; }
-.step.here .stepmain::after{ content:'◂'; grid-column:4; font-size:12px; }
-.stepmain{ grid-template-columns:26px 1fr auto auto; }
-.step:not(.here) .steptxt b::before{ content:''; display:inline-block; width:6px; height:6px; margin:0 8px 2px 0;
-  border:1px solid currentColor; vertical-align:middle; }
-.step.done:not(.here) .steptxt b::before{ background:currentColor; }
-
-/* 出題の頭：番号の下に二重線 */
-.qhead{ border-bottom:3px double var(--ink); padding-bottom:var(--s1); }
-#qcount{ letter-spacing:.25em; color:var(--ink); }
-#qstage::before{ content:''; display:inline-block; width:6px; height:6px; background:var(--acc); margin:0 8px 1px 0; vertical-align:middle; }
-
-/* 聴くボタン：左に斜線の帯 */
-#play{ padding-left:40px; }
-#play .pnote{ position:absolute; left:0; top:0; bottom:0; width:30px; display:flex; align-items:center; justify-content:center;
-  background:repeating-linear-gradient(-45deg,var(--ink) 0 1px,transparent 1px 4px); border-right:1px solid var(--ink); }
-
-/* 選択肢：左に四角い印。押した瞬間に反転 */
-.opts.plain .opt,.opts.pitch .opt,.opts.grid2 .opt,.opts.grid3 .opt{ position:relative; }
-.opts.plain .opt::before,.opts.pitch .opt::before{ content:''; position:absolute; left:14px; top:50%; width:7px; height:7px;
-  transform:translateY(-50%); border:1px solid currentColor; }
-.opt.right::before{ background:currentColor; }
-.opt.right::after{ content:'◂'; position:absolute; right:14px; top:50%; transform:translateY(-50%); font-size:12px; }
-.opts.count .opt.right::after,.opts.shape .opt.right::after,.keyopts .opt.right::after{ content:none; }
-
-/* 答え合わせ・結果の枠 */
-#feedback{ position:relative; }
-#verdict::before{ content:''; display:inline-block; width:8px; height:8px; margin:0 10px 2px 0; vertical-align:middle; background:currentColor; }
-#rstage{ letter-spacing:.25em; border-bottom:3px double var(--ink); padding-bottom:var(--s1); margin-bottom:var(--s2); }
-.dcard{ position:relative; }
-.dcard::before{ content:''; position:absolute; top:-1px; left:-1px; right:-1px; height:5px; background:var(--ink); }
-.sheetkicker::before{ content:''; display:inline-block; width:6px; height:6px; background:var(--ink); margin:0 8px 1px 0; vertical-align:middle; }
-
-/* ── 動き ── */
-@keyframes nierIn{ 0%{opacity:0; transform:translateX(-6px)} 40%{opacity:1} 55%{opacity:.25} 70%{opacity:1} 100%{opacity:1; transform:none} }
-@keyframes nierType{ from{ clip-path:inset(0 100% 0 0) } to{ clip-path:inset(0 0 0 0) } }
-@keyframes nierFlash{ 0%{ background:var(--ink); color:var(--paper) } 100%{} }
-#home > *, #result > *, .step, .opts .opt, #feedback > *, .sheetopt{ animation:nierIn .42s ease-out both; }
-.step:nth-child(2){animation-delay:.04s} .step:nth-child(3){animation-delay:.08s} .step:nth-child(4){animation-delay:.12s}
-.step:nth-child(5){animation-delay:.16s} .step:nth-child(6){animation-delay:.2s}  .step:nth-child(7){animation-delay:.24s}
-.step:nth-child(n+8){animation-delay:.28s}
-.opts .opt:nth-child(2){animation-delay:.05s} .opts .opt:nth-child(3){animation-delay:.1s} .opts .opt:nth-child(n+4){animation-delay:.15s}
-.opt.right,.opt.wrong{ animation:nierFlash .25s steps(2,end); }
-@media (prefers-reduced-motion:reduce){ *,*::before,*::after{ animation:none !important; } }
 </style>
-<!-- 共通の楽器の音（読み込めない時は、これまでの合成音で鳴る） -->
-<script src="https://yagarguitar-stack.github.io/design-system/v1/sound.js"></script>
 </head>
 <body>
 
@@ -598,8 +407,8 @@ h2::after{ content:''; margin-left:auto; width:40px; height:6px;
     <label><span>問題の音</span>
       <input id="volq"  type="range" min="0" max="100" step="5" aria-label="問題の音の大きさ">
       <b id="volqv"></b></label>
-    <label><span>正解の音</span>
-      <input id="volse" type="range" min="0" max="100" step="5" aria-label="正解の音の大きさ">
+    <label><span>効果音</span>
+      <input id="volse" type="range" min="0" max="100" step="5" aria-label="効果音の大きさ">
       <b id="volsev"></b></label>
   </div>
 
@@ -618,7 +427,6 @@ h2::after{ content:''; margin-left:auto; width:40px; height:6px;
   <div id="radar"></div>
   <button id="wipe" type="button">記録を消してはじめから</button>
   <p id="wiped" aria-live="polite"></p>
-  <div id="sndcredits"></div>
 </div>
 
 <!-- ══ 速さをえらぶ ══ -->
@@ -775,7 +583,6 @@ function audioReady(){
   SEG=AC.createGain(); SEG.gain.value=1; SEG.connect(AC.destination);
   try{ applyVol(); }catch(_){}
   DRUMG=AC.createGain(); DRUMG.gain.value=DRUM_MIX; DRUMG.connect(MASTER);
-  try{ smpInit(); }catch(_){}
   /* iOS の無音対策：長さ0のバッファを一度鳴らして解錠する */
   try{ const b=AC.createBuffer(1,1,22050); const src=AC.createBufferSource();
        src.buffer=b; src.connect(MASTER); src.start(0); }catch(e){}
@@ -3577,9 +3384,16 @@ function piano(at, midi, vol, cut){
    ══════════════════════════════════════════════════════════════ */
 const INST_STORE = 'mockingbird:ear:inst';
 
+/* 選べる音色。歪みの深い3つは、入り口を上げても出口が大きくならず
+   音量を揃えられないので、ここには出さない */
+const INST_CHOICES = ['clean', 'steel', 'nylon', 'piano'];
+
 function loadInst(){
-  try{ return localStorage.getItem(INST_STORE) === 'piano' ? 'piano' : 'guitar'; }
-  catch(_){ return 'guitar'; }
+  try{
+    const v = localStorage.getItem(INST_STORE);
+    if(v === 'guitar') return 'clean';            /* 古い記録の読み替え */
+    return INST_CHOICES.indexOf(v) >= 0 ? v : 'clean';
+  }catch(_){ return 'clean'; }
 }
 function saveInst(v){
   try{ localStorage.setItem(INST_STORE, v); }catch(_){}
@@ -3590,9 +3404,9 @@ let INST = loadInst();
 /* ══════════════════════════════════════════════════════════════
    音の大きさ
 
-   道筋を二つに分ける。**問題の音は MASTER を通り、正解の音は
+   道筋を二つに分ける。**問題の音は MASTER を通り、効果音は
    その外を通って直に出口へ向かう。** 同じ道を通していると、
-   問題の音を絞った時に正解の音まで一緒に小さくなる。
+   問題の音を絞った時に効果音まで一緒に小さくなる。
 
    これは記録ではなく設定なので、「記録を消してはじめから」では消えない。
    ══════════════════════════════════════════════════════════════ */
@@ -3615,7 +3429,7 @@ function applyVol(){
 }
 
 function setInst(v){
-  INST = (v === 'piano') ? 'piano' : 'guitar';
+  INST = (INST_CHOICES.indexOf(v) >= 0) ? v : 'clean';
   saveInst(INST);
 }
 
@@ -3662,7 +3476,7 @@ const SOLO_ONLY = [
 function voiceLabel(id){
   const all = MIXABLE.concat(SOLO_ONLY);
   for(const v of all) if(v.id === id) return v.label;
-  return id === 'guitar' ? 'ギター' : id;
+  return id === 'guitar' ? 'エレキ' : id;
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -3700,9 +3514,9 @@ const GTR_TILT   = 0.301;    /* 半音あたり何デシベル持ち上げるか
    数はすべて、C3・C4・C5 の3点を書き出して測った平均から出した。
    耳が大きさを判ずるのは音の頭であるから、**頭の0.3秒**を揃えている。 */
 const VOICE_TRIM = {
-  steel : 0.42,   /* アコースティック  -7.6dB */
-  nylon : 0.48,   /* ナイロン          -6.4dB */
-  clean : 0.33,   /* エレキ            -9.6dB */
+  steel : 0.34,   /* アコースティック  -9.4dB */
+  nylon : 0.49,   /* ナイロン          -6.2dB */
+  clean : 0.34,   /* エレキ            -9.4dB */
   crunch: 1.00    /* クランチ           0.0dB */
   /* 歪みの深い音色（ドライブ・ハイゲイン）はここに置いていない。
      波形を潰して作る音であるから、**入り口を上げても出口はほとんど
@@ -3710,12 +3524,69 @@ const VOICE_TRIM = {
      いまの段では使っていないので、支障もない。 */
 };
 
+/* ══ 「ギター」の正体はエレキ ══
+   鳴らす直前に音色をエレキ（clean）へ戻す処理があるため、**音色を
+   指定しない「ギター」は、実際にはエレキが鳴っている。**
+   ここで引き当てを揃えないと、音色ごとの音量調整を素通りして
+   しまい、和音の頂点が 2.16 まで達して割れていた。 */
+function voiceOf(v){ return (!v || v === 'guitar') ? 'clean' : v; }
+
+/* ══════════════════════════════════════════════════════════════
+   音の高さごとの補正
+
+   弦をはじく音は、音の高さによって大きさが大きく変わる。どの弦の
+   何フレットで鳴らすか、箱がどう共鳴するか——作りに由来するもので、
+   一律の掛け算では均せない。実際に全音域を書き出して測ったところ、
+   **ナイロンは20.4デシベル、アコースティックは21.0デシベルも
+   振れていた。** ピアノは1.2デシベルで平ら。
+
+   **これは高低を問う段で命取りになる。** 高い音が小さいと決まって
+   いれば、生徒は高さではなく大きさで答えられてしまう。
+
+   そこで MIDI 36〜88 の1半音ごとに測り、ピアノの平均（-22.4dB）へ
+   揃える補正値を表にした。行き過ぎて歪まぬよう±9デシベルで頭打ち。
+   表の外の音は端の値を使う。
+   ══════════════════════════════════════════════════════════════ */
+const CURVE_LO = 36;
+
+const VOICE_CURVE = {
+  clean: [
+      1.8,   1.0,   1.0,   0.1,   1.1,   1.2,   0.8,   2.0,   1.9,   2.0,   1.5,   1.7,   1.0,
+      2.8,   1.0,   1.1,  -0.2,   0.9,   0.8,  -0.7,  -0.1,  -0.4,  -1.4,   0.1,   0.7,   0.1,
+     -1.1,   1.2,  -2.4,  -2.1,  -2.1,  -0.4,  -3.7,  -2.6,  -1.0,  -2.2,  -1.5,  -1.8,  -1.9,
+     -2.2,  -2.2,  -0.4,  -1.7,   0.3,  -1.0,  -0.5,   1.1,   0.0,  -0.9,  -3.9,   4.1,  -1.1,
+     -5.2
+  ],
+  steel: [
+     -1.5,   5.4,   7.1,   3.0,   5.5,   5.7,   1.4,  -4.5,   4.8,   6.8,   6.3,  -0.1,   6.0,
+      7.0,   5.0,   5.6,   4.7,   5.8,  -0.6,  -6.9,   2.3,   5.4,   5.9,  -3.9,   0.3,   3.8,
+      1.7,   2.7,   6.2,   5.7,   3.5,   1.0,   0.6,   6.5,   7.5,   1.9,   0.0,   0.7,   3.3,
+      8.8,   6.9,   8.9,  -1.3,   6.8,   5.0,   5.1,   1.7,   9.9,  11.1,  12.0,  10.1,   5.1,
+     10.3
+  ],
+  nylon: [
+      2.8,   5.0,  -0.9,   0.5,  -1.0,   2.3,  -5.2,  -1.0,   2.6,  -0.2,   4.3,   3.9,   1.8,
+      4.1,   1.3,   2.4,  -0.6,  -3.5, -10.0,  -3.3,   1.6,  -6.3,   0.1,   0.4,   2.7,   1.3,
+      0.7,  -3.7,  -7.5,   0.6,   3.5,   5.7,   1.6,  -0.3,   0.5,   1.6,  -4.2,  -0.4,   0.9,
+      1.5,   4.5,   4.4,   5.4,  -0.6,   0.8,   4.6,   5.6,   5.0,   3.3,   4.3,  10.3,   5.8,
+      3.3
+  ]
+};
+function curveGain(v, midi){
+  const c = VOICE_CURVE[v];
+  if(!c) return 1;
+  const i = Math.max(0, Math.min(c.length - 1, Math.round((midi == null ? 60 : midi) - CURVE_LO)));
+  return Math.pow(10, c[i] / 20);
+}
+
 function instGain(v, midi, vol){
   const base = (vol == null ? 1 : vol);
   if(v === 'piano') return base * PIANO_TRIM;
   const tilt = Math.pow(10, (((midi == null ? 60 : midi) - 60) * GTR_TILT) / 20);
   /* 持ち上げすぎて歪まぬよう、上下2オクターヴ分で頭打ちにする */
-  return base * GTR_TRIM * Math.min(Math.max(tilt, 0.66), 1.52) * (VOICE_TRIM[v] || 1);
+  const voice = voiceOf(v);
+  return base * GTR_TRIM * Math.min(Math.max(tilt, 0.66), 1.52)
+       * (VOICE_TRIM[voice] || 1) * curveGain(voice, midi);
 }
 
 /* 出題側はこれを使う。pluck と同じ引数で呼べる。
@@ -3724,9 +3595,6 @@ function instGain(v, midi, vol){
 function note(at, midi, vol, cut, opt){
   opt = opt || {};
   const v = opt.v || INST;
-  /* 録音の音が使える時はそちらで鳴らす。使えなければ下の合成音へ */
-  const r = smpNote(at, midi, vol, cut, opt, v);
-  if(r) return r;
   const g = instGain(v, midi, vol);
 
   if(v === 'piano') return piano(at, midi, g, cut);
@@ -3735,78 +3603,6 @@ function note(at, midi, vol, cut, opt){
      ここで差し替えれば、この1音だけがその音色になる。 */
   if(v && v !== 'guitar'){ try{ SND.set({ tone:v }); }catch(_){} }
   return pluck(at, midi, g, cut, opt);
-}
-
-
-/* ══════════════════════════════════════════════════════════════
-   録音の音（共通の楽器の音 design-system/v1/sound.js）
-
-   合成音の代わりに、実際の楽器を録音した音で鳴らす。
-   **読み込めない時（通信がない、置き場がない）は、これまでの合成音のまま。**
-   読み込みが済むまでの間も合成音で鳴る。
-
-   ══ 声と録音の対応 ══
-     ギター（画面の楽器）・アコースティック … アコギ
-     ナイロン                               … ナイロン
-     エレキ                                 … エレキ
-     クランチ・ドライブ・ハイゲイン         … エレキの録音を、今のアンプに通して歪ませる
-     ピアノ                                 … ピアノ
-
-   録音には楽器の胴の響きがすでに入っているので、歪み以外はアンプを通さず
-   出口（MASTER）へ直に送る。合成の箱鳴りを重ねると、響きが二重になる。
-
-   ══ 音量 ══
-   録音は1音ごとの大きさを sound.js 側で揃えてある（鳴り始め0.3秒）。
-   **高低を問う段で、大きさから答えが読めないようにするため。**
-   合成音で掛けていた「高い音ほど持ち上げる」手当ては要らない。
-   ここでは、合成音と同じ大きさに釣り合わせる倍率だけを掛ける。
-   ══════════════════════════════════════════════════════════════ */
-const SMP_INST = { guitar:'acoustic', steel:'acoustic', nylon:'nylon', clean:'electric',
-                   crunch:'electric', drive:'electric', metal:'electric', piano:'piano' };
-const SMP_AMP  = { crunch:true, drive:true, metal:true };
-let   SMP_TRIM   = 1.324;  /* 合成音との釣り合い（4つの声の C3・C4・C5 を鳴らして測った平均） */
-let   SMP_AMP_IN = 2.941;  /* アンプに入れる大きさ（合成の弦と同じ強さで歪むように。入口で測った平均） */
-/* 高さによる大きさの傾きを打ち消す（デシベル／半音）。
-   音域を3半音おきに鳴らして測った傾きの逆。どれも2オクターブで2デシベル未満と小さいが、
-   **高低を問う段では、系統的な傾きは小さくても答えの手がかりになる。** */
-const SMP_TILT = {"steel": 0.062, "piano": -0.017, "nylon": -0.026, "clean": 0.014};
-const SMP_LAST = new Map();   /* 弦ごとの最後の音。同じ弦を弾けば前の音は止まる */
-let   SMP_ON = true;          /* 試験用。false にすると合成音に戻る */
-
-function smpInit(){
-  if(smpInit.done || !AC || !window.DS || !DS.sound) return;
-  smpInit.done = true;
-  try{
-    DS.sound.use({ context:AC, output:MASTER });
-    DS.sound.load(['acoustic','nylon','electric','piano']).then(smpCredits).catch(function(){});
-  }catch(_){}
-}
-function smpReady(v){
-  const inst = SMP_INST[v];
-  return !!(SMP_ON && inst && window.DS && DS.sound && DS.sound.isReady(inst));
-}
-function smpNote(at, midi, vol, cut, opt, v){
-  if(!AC || !smpReady(v)) return null;
-  /* 弦の技（ハーモニクス・チョーキング等）は録音では作れないので合成音に任せる */
-  if(opt.harm || opt.pm || opt.from || opt.glide || opt.back || opt.vib) return null;
-  if(typeof window!=='undefined' && window.__pluckLog) window.__pluckLog.push({at, midi});
-  let dest = MASTER, g = vol * SMP_TRIM * Math.pow(10, ((SMP_TILT[v==='guitar'?'steel':v] || 0) * ((midi == null ? 60 : midi) - 60)) / 20);
-  if(SMP_AMP[v]){
-    try{ SND.set({ tone:v }); }catch(_){}
-    dest = guitarBus() || MASTER;
-    g = vol * SMP_AMP_IN;
-  }
-  const s = (opt.str != null && opt.str >= 0) ? opt.str : null;
-  if(s != null){ const p = SMP_LAST.get(s); if(p) try{ p.stop(Math.max(at, AC.currentTime)); }catch(_){} }
-  const h = DS.sound.play(SMP_INST[v], midi, { time:at, vel:Math.sqrt(Math.max(0, g)),
-                                               dur:(cut > 0 ? cut : null), release:0.06, dest:dest });
-  if(s != null) SMP_LAST.set(s, h);
-  return h;
-}
-/* 出典の表記。ナイロン（CC BY-SA 3.0）を使うので載せる */
-function smpCredits(){
-  const el = document.getElementById('sndcredits');
-  if(el && window.DS && DS.sound && DS.sound.creditsHtml) el.innerHTML = DS.sound.creditsHtml(['acoustic','nylon','electric','piano']);
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -3924,8 +3720,8 @@ function kbSvg(lo, hi, marks, W, H){
 
 /* ══ チューナーの針 ══
    ズレを問う段のための図。目盛りは ±50 セント。 */
-function tunerSvg(cents, W){
-  const H = 112;
+function tunerSvg(cents, W, hz){
+  const H = hz ? 130 : 112;
   const svg = document.createElementNS(NS,'svg');
   svg.setAttribute('viewBox','0 0 ' + W + ' ' + H);
   svg.setAttribute('class','tuner');
@@ -3933,7 +3729,7 @@ function tunerSvg(cents, W){
     for(const k in a) e.setAttribute(k,a[k]); svg.appendChild(e); return e; };
 
   /* 針の届く高さと数値の位置が重ならないよう、腕を短く取る */
-  const cx = W/2, cy = H - 10, R = H - 42;
+  const cx = W/2, cy = H - (hz ? 28 : 10), R = (hz ? H - 60 : H - 42);
   const ang = c => (-Math.PI/2) + (Math.max(-50, Math.min(50, c)) / 50) * (Math.PI/3);
   const pt  = (c,r)=> [cx + Math.cos(ang(c))*r, cy + Math.sin(ang(c))*r];
 
@@ -3959,6 +3755,74 @@ function tunerSvg(cents, W){
   el('text',{ x:cx, y:19, class:'tval', 'text-anchor':'middle' })
     .textContent = (Math.abs(cents) < 0.5) ? 'ぴったり'
                  : ((cents > 0 ? '+' : '') + Math.round(cents) + ' セント');
+
+  /* ══ 周波数も添える ══
+     セントは比であって、同じセント数でも音域が変われば Hz の差は変わる。
+     **実物のチューナーと同じ読み方**ができるよう、両方を並べて出す。 */
+  if(hz){
+    el('text',{ x:cx, y:H - 8, class:'thz', 'text-anchor':'middle' })
+      .textContent = hz;
+  }
+  return svg;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   旋律の形を重ねて描く
+
+   ══ なぜ鍵盤ではいけないか ══
+   移調している以上、**同じ旋律でも押される鍵はまるで別の場所になる。**
+   10音が3オクターヴに散って潰れるうえ、肝心の「同じかどうか」が
+   図から読めない。
+
+   ══ 主音からの高さで揃える ══
+   縦軸を「その調の主音から何半音上か」に取れば、調が違っても
+   同じ旋律は同じ形に落ちる。**二本が重なれば同じ、一点だけ離れれば
+   そこが変えられた音。** 段の眼目がそのまま図になる。
+
+   横線は音階の7つの音。**半音ずれた音は線と線の間に落ちる**ので、
+   「調の外へ出た」ことが目で見える。音階の中で入れ替わった音は、
+   別の線の上に乗る。二つの段の違いも図に出る。
+   ══════════════════════════════════════════════════════════════ */
+function melodySvg(mel, W){
+  const H = 150, PADL = 26, PADR = 12, PADT = 14, PADB = 22;
+  const svg = document.createElementNS(NS,'svg');
+  svg.setAttribute('viewBox','0 0 ' + W + ' ' + H);
+  svg.setAttribute('class','melfig');
+  const el = (n,a,parent)=>{ const e=document.createElementNS(NS,n);
+    for(const k in a) e.setAttribute(k,a[k]); (parent||svg).appendChild(e); return e; };
+
+  const a = mel.a.map(m=> m - mel.key1);
+  const b = mel.b.map(m=> m - mel.key2);
+  const all = a.concat(b);
+  const lo = Math.min(0, Math.min.apply(null, all)) - 1;
+  const hi = Math.max(11, Math.max.apply(null, all)) + 1;
+
+  const x = i => PADL + (W - PADL - PADR) * (a.length < 2 ? 0.5 : i / (a.length - 1));
+  const y = v => PADT + (H - PADT - PADB) * (1 - (v - lo) / (hi - lo));
+
+  /* 音階の7つの音に横線。主音だけ太く */
+  MAJOR.forEach((v,i)=>{
+    el('line',{ x1:PADL-6, y1:y(v).toFixed(1), x2:W-PADR, y2:y(v).toFixed(1),
+                class:'mgrid' + (i === 0 ? ' tonic' : '') });
+    el('text',{ x:PADL-10, y:(y(v)+3).toFixed(1), class:'mlab', 'text-anchor':'end' })
+      .textContent = (i + 1);
+  });
+
+  const draw = (vals, cls)=>{
+    el('polyline',{ points: vals.map((v,i)=> x(i).toFixed(1)+','+y(v).toFixed(1)).join(' '),
+                    class:'mline ' + cls });
+    vals.forEach((v,i)=> el('circle',{ cx:x(i).toFixed(1), cy:y(v).toFixed(1), r:4,
+                                       class:'mdot ' + cls }));
+  };
+  draw(a, 'one');
+  draw(b, 'two');
+
+  /* 離れた音に印 */
+  a.forEach((v,i)=>{ if(v !== b[i])
+    el('circle',{ cx:x(i).toFixed(1), cy:y(b[i]).toFixed(1), r:8, class:'mmark' }); });
+
+  el('text',{ x:PADL, y:H-7, class:'mkey one' }).textContent = '1度目';
+  el('text',{ x:PADL+48, y:H-7, class:'mkey two' }).textContent = '2度目';
   return svg;
 }
 
@@ -3973,7 +3837,18 @@ function drawFigure(Q){
 
   /* ズレを問う段はチューナー */
   if(Q.fig === 'tuner'){
-    box.appendChild(tunerSvg(Q.cents || 0, 300));
+    /* 2音の周波数を、鳴った順に添える */
+    const two = seq.slice().sort((a,b)=> a.t - b.t);
+    const hz = (two.length >= 2)
+      ? (hzText(two[0].m) + ' → ' + hzText(two[1].m))
+      : (two.length ? hzText(two[0].m) : '');
+    box.appendChild(tunerSvg(Q.cents || 0, 300, hz));
+    return;
+  }
+
+  /* 旋律を比べる段は、形を重ねた図 */
+  if(Q.fig === 'melody' && Q.mel){
+    box.appendChild(melodySvg(Q.mel, 300));
     return;
   }
 
@@ -4715,6 +4590,10 @@ function drillStep(){
 }
 
 async function playDrillSound(){
+  if(VOL.q <= 0){
+    $('qnote').textContent = '「問題の音」が0%です。一覧の画面で音量を上げてください。';
+    return;
+  }
   const ac = await audioWake();
   if(!ac) return;
   soundStop();
@@ -4730,7 +4609,7 @@ function drillAnswer(chosen, btn){
   clearDrill();
 
   const ok = (chosen === Q.answer);
-  if(ok){ quiz.ok++; chime(); }
+  if(ok){ quiz.ok++; chime(); } else buzz();   /* 時間切れも鳴らす */
   quiz.marks.push(ok);
   Q.chosen = chosen;                       /* 振り返りに使う */
 
@@ -5012,12 +4891,23 @@ const STAGES = [
       };
     }},
 
+  /* ══ 3度を濁りから出す ══
+     以前は低い音域（A2〜G#3）で4音——根音・3度・5度・オクターヴ上の
+     根音——を重ねていた。これが初級の締めくくりを上級並みの難所に
+     していた。
+
+     ・**低い音域で4音を重ねると、倍音同士がぶつかって団子になる**
+     ・**オクターヴの重ねが根音を厚くし、明暗を決める3度を覆い隠す。**
+       4音のうち2音が根音では、3度の持ち分は4分の1しかない
+
+     中音域へ上げ、重ねを外して3音にした。明暗を決めるのは3度ただ
+     一つであるから、そこが前に出ていなければ稽古にならない。 */
   { no:8, name:'明るいか、暗いか', hint:'和音のひびきを聴きます', n:10,
     kinds:['明るい','暗い'],
     make(){
       const major = Math.random() < 0.5;
-      const iv    = major ? [0,4,7,12] : [0,3,7,12];
-      const root  = rootLow();
+      const iv    = major ? [0,4,7] : [0,3,7];
+      const root  = rootMid();
       return {
         ask:'この和音のひびきは',
         layout:'plain', options:['明るい','暗い'],
@@ -5267,6 +5157,13 @@ function namePool(semi, near){
 
 /* ══ オクターブ違い ══
    音域から外れぬよう、2音とも C1〜C6 の内に収める。 */
+/* 半音の値から周波数へ。A4=440Hz を基準に、1半音ごとに 2 の12乗根 */
+function toHz(midi){ return 440 * Math.pow(2, (midi - 69) / 12); }
+
+/* 小数1桁で揃える。**桁を音域で変えると「880Hz と 110.0Hz」のように
+   並びが不揃いになる。** 実物のチューナーも1桁で出す。 */
+function hzText(midi){ return toHz(midi).toFixed(1) + 'Hz'; }
+
 function makeOctave(kinds){
   const k    = pick(kinds);
   const gap  = 12 * k;
@@ -5283,8 +5180,15 @@ function makeOctave(kinds){
     ask:'2つの音の隔たりは', layout:'plain',
     options: kinds.map(x=> x === 0 ? '同じ高さ' : (x + 'オクターブ')),
     answer: label,
-    note: k === 0 ? 'まったく同じ高さでした'
-                  : (label + '（' + gap + '半音）' + (m2 > m1 ? '上でした' : '下でした')),
+    /* ══ 周波数を添える ══
+       **オクターブは周波数がちょうど2倍。** 数字で見せれば、
+       「同じ音名なのに高さが違う」の正体が一度で腑に落ちる。
+       2オクターブなら4倍、3オクターブなら8倍。 */
+    note: k === 0
+      ? ('まったく同じ高さ（どちらも ' + hzText(m1) + '）でした')
+      : (hzText(m1) + ' と ' + hzText(m2) + '。' +
+         label + '（' + gap + '半音）' + (m2 > m1 ? '上' : '下') +
+         'で、周波数は' + (m2 > m1 ? Math.pow(2, k) + '倍' : Math.pow(2, k) + '分の1') + 'でした'),
     seq:[ ev(0, m1, 3, 1.5), ev(1.1, m2, 3, 3.0) ]
   };
 }
@@ -5316,15 +5220,16 @@ function makeTranspose(mode){
   }
   const key = k=> chordNotes(k === 1 ? 0 : 3.0, voiced(key1 + (k === 1 ? 0 : (key2 - key1)),
                                                       CHORD['メジャー'], 52), 1.1);
+  const mel1 = melodyNotes(0.9, key1, degs,  null);
+  const mel2 = melodyNotes(3.9, key2, degs2, alter);
   return {
     ask:'2度目の旋律は', layout:'plain',
     options:['同じ旋律','ちがう旋律'],
     answer: same ? '同じ旋律' : 'ちがう旋律',
     note: why,
-    seq: key(1)
-      .concat(melodyNotes(0.9, key1, degs,  null))
-      .concat(key(2))
-      .concat(melodyNotes(3.9, key2, degs2, alter))
+    fig:'melody',
+    mel:{ key1:key1, key2:key2, a:mel1.map(e=> e.m), b:mel2.map(e=> e.m) },
+    seq: key(1).concat(mel1).concat(key(2)).concat(mel2)
   };
 }
 
@@ -5858,7 +5763,7 @@ function shapeGlyph(iv){
    楽器えらび
    ══════════════════════════════════════════════════════════════ */
 /* ══ つまみ ══
-   正解の音を動かした時だけ、手を離した折に一度鳴らして聴かせる。
+   効果音を動かした時だけ、手を離した折に一度鳴らして聴かせる。
    動かしている最中に鳴らすと、鳴りっぱなしになる。 */
 function drawVolume(){
   const pairs = [['volq','volqv','q'], ['volse','volsev','se']];
@@ -5878,7 +5783,7 @@ function drawVolume(){
 function drawInstPicker(id){
   const box = $(id); if(!box) return;
   box.innerHTML = '';
-  [['guitar','ギター'],['piano','ピアノ']].forEach(([v,label])=>{
+  INST_CHOICES.map(v=>[v, (MIXABLE.find(x=> x.id === v) || {}).label || v]).forEach(([v,label])=>{
     const b = document.createElement('button');
     b.className = 'inst' + (INST === v ? ' on' : '');
     b.type = 'button';
@@ -6016,8 +5921,14 @@ function setPlayNote(){
 }
 
 async function playCurrent(){
+  /* 絞りきったまま段を始めると、無音のまま進んでしまう */
+  if(VOL.q <= 0){
+    $('qnote').textContent = '「問題の音」が0%です。一覧の画面で音量を上げてください。';
+    return;
+  }
   const ac = await audioWake();
   if(!ac){ $('qnote').textContent = '音を出せませんでした。画面に一度触れてからお試しください。'; return; }
+  $('qnote').textContent = '';     /* 前の知らせを消す。直ったのに残っては紛らわしい */
   soundStop();
 
   const btn = $('play');
@@ -6128,6 +6039,49 @@ function bell(ac, hz, at, len, vol){
   });
 }
 
+/* ══════════════════════════════════════════════════════════════
+   不正解の音 — ブブー
+
+   鐘とは作りを変える。**鐘は減りながら消える音、ブザーは平らに
+   鳴り続けて断ち切られる音。** この違いが、正解と不正解を耳で
+   即座に分ける。短く2度、後のほうを長く。
+
+   鋸波を2本、0.6Hz だけずらして重ねる。**うなりが生まれ、
+   電子ブザー特有のざらつきになる。** 1本では滑らかすぎて
+   ブザーに聞こえない。低い方を通す漉し器で角を丸め、
+   耳に刺さらぬようにしてある。
+
+   高さは 152Hz。最も近い鍵から40セント下——鐘と同じ用心で、
+   **基準音として耳に残らぬ高さ**に置いている。
+   ══════════════════════════════════════════════════════════════ */
+const BUZZ_HZ = 152;
+
+function buzz(){
+  if(VOL.se <= 0) return;
+  const ac = audioReady(); if(!ac || !MASTER) return;
+  const t0 = ac.currentTime + 0.01;
+  /* 低い音は、同じ実効値でも小さく聞こえる。鐘より持ち上げてある */
+  [[0, 0.13, 0.17], [0.19, 0.32, 0.19]].forEach(part=>{
+    const dt = part[0], len = part[1], vol = part[2];
+    const at = t0 + dt;
+    const g = ac.createGain(), f = ac.createBiquadFilter();
+    f.type = 'lowpass';
+    f.frequency.value = 1100;      /* 角を丸める */
+    [0, 0.6].forEach(det=>{
+      const o = ac.createOscillator();
+      o.type = 'sawtooth';
+      o.frequency.value = BUZZ_HZ + det;
+      o.connect(f);
+      o.start(at); o.stop(at + len + 0.03);
+    });
+    g.gain.setValueAtTime(0.0001, at);
+    g.gain.exponentialRampToValueAtTime(vol, at + 0.008);
+    g.gain.setValueAtTime(vol, at + len - 0.02);          /* 平らに保つ */
+    g.gain.exponentialRampToValueAtTime(0.0001, at + len); /* 断ち切る */
+    f.connect(g); g.connect(SEG || MASTER);
+  });
+}
+
 function chime(){
   if(VOL.se <= 0) return;
   const ac = audioReady(); if(!ac || !MASTER) return;
@@ -6139,7 +6093,7 @@ function chime(){
 /* ══ 答え合わせ ══ */
 function answer(chosen, btn){
   const ok = (chosen === Q.answer);
-  if(ok){ quiz.ok++; chime(); }
+  if(ok){ quiz.ok++; chime(); } else buzz();
   quiz.marks.push(ok);
 
   [].forEach.call($('opts').querySelectorAll('.opt'), b=>{
@@ -6367,63 +6321,6 @@ window.MB = {
   audioReady, audioWake, stopAllSched, soundStop
 };
 
-</script>
-<script>
-/* ══ モチーフ層：文字がほどけて現れる（共通の部品 components.js と同じ動き・同じ文字） ══
-   見た目だけの演出。中の記号（♭や音符の図）は崩さず、文字の部分だけをほどく。 */
-(function(){
-  var GLY='アイウエオカキクケコサシスセソ◆◇■□0123456789', D=320;
-  var reduce=window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function texts(el){
-    var out=[], w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,{acceptNode:function(n){
-      if(!n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
-      for(var p=n.parentNode;p&&p!==el;p=p.parentNode){ if(p.namespaceURI==='http://www.w3.org/2000/svg') return NodeFilter.FILTER_REJECT; }
-      return NodeFilter.FILTER_ACCEPT; }});
-    while(w.nextNode()) out.push(w.currentNode);
-    return out;
-  }
-  function decode(el){
-    if(!el||reduce||el._dec) return;
-    var ns=texts(el); if(!ns.length) return;
-    var orig=ns.map(function(n){return n.nodeValue;}), t0=performance.now(); el._dec=true;
-    (function f(now){
-      var k=Math.min(1,(now-t0)/D);
-      ns.forEach(function(n,j){ var s=orig[j], m=Math.floor(s.length*k), o=s.slice(0,m);
-        for(var i=m;i<s.length;i++) o+=/\s/.test(s[i])?s[i]:GLY[Math.floor(Math.random()*GLY.length)];
-        n.nodeValue=o; });
-      if(k<1) requestAnimationFrame(f); else { el._dec=false; el._sig=el.textContent; }
-    })(t0);
-  }
-  window.mbDecode=decode;
-  // 中身が替わったらほどき直す（問題文・判定・結果）
-  function watch(id){
-    var el=document.getElementById(id); if(!el||!window.MutationObserver) return;
-    new MutationObserver(function(){
-      if(el._dec || el.textContent===el._sig || !el.textContent.trim()) return;
-      decode(el);
-    }).observe(el,{childList:true,characterData:true,subtree:true});
-  }
-  ['qask','verdict','judge','score','rstage','qstage'].forEach(watch);
-  // 画面が開いた時：見出しと今の段の名前をほどく
-  function onOpen(id,sel){
-    var el=document.getElementById(id); if(!el||!window.MutationObserver) return;
-    var was=el.style.display!=='none';
-    new MutationObserver(function(){
-      var now=el.style.display!=='none'; if(now&&!was) setTimeout(function(){ el.querySelectorAll(sel).forEach(decode); },40);
-      was=now;
-    }).observe(el,{attributes:true,attributeFilter:['style']});
-  }
-  onOpen('home','h2, .step.here .steptxt b, #course .inst.on');
-  onOpen('quiz','#qcount');
-  document.addEventListener('DOMContentLoaded',function(){
-    document.querySelectorAll('#home h2, #home .step.here .steptxt b').forEach(decode);
-  });
-  // 初級・上級・デイリーを切り替えた時も、見出しをほどく
-  document.addEventListener('click',function(e){
-    if(e.target.closest && e.target.closest('#course .inst')) setTimeout(function(){
-      document.querySelectorAll('#home h2, #home .step.here .steptxt b, #course .inst.on').forEach(decode); },40);
-  });
-})();
 </script>
 </body>
 </html>
